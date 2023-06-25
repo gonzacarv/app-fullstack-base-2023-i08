@@ -8,8 +8,7 @@ body {
 main {
     flex: 1 0 auto;
 }
-.titulo{
-    color: brown;
-    font-weight: bold;
+.TituloDevice{
+    color: rgb(2, 102, 52);
     font-size: large;
 }

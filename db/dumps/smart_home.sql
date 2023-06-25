@@ -32,11 +32,12 @@ SET time_zone = "+00:00";
 -- Table structure for table `Devices`
 --
 
-CREATE TABLE `Devices` (
+CREATE TABLE `Dispositivos` (
   `id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
   `description` varchar(128) NOT NULL,
   `state` int(11) NOT NULL,
+  `intensidad` int(11) NOT NULL,
   `type` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -44,13 +45,13 @@ CREATE TABLE `Devices` (
 -- Dumping data for table `Devices`
 --
 
-INSERT INTO `Devices` (`id`, `name`, `description`, `state`, `type`) VALUES
-(1, 'Lampara 1', 'Luz living', 1, 0),
-(2, 'Lampara 2', 'Luz cocina', 0, 0),
-(3, 'Velador', 'Velador living', 1, 0),
-(4, 'Persiana 1', 'Persiana living', 1, 1),
-(5, 'Persiana 2', 'Persiana de la cocina', 1, 1),
-(6, 'Persiana 3', 'Persiana balcon', 0, 1);
+INSERT INTO `Dispositivos` (`id`, `name`, `description`, `state`, `intensidad`, `type`) VALUES
+(1, 'Lampara 1', 'Luz living', 1, 100, 0),
+(2, 'Lampara 2', 'Luz cocina', 0, 100, 0),
+(3, 'Ventilador 1', 'Ventilador del living', 1, 100, 1),
+(4, 'Switch 1', 'Switch de la persiana del living', 1, 100, 2),
+(5, 'Ventilador 2', 'Ventilador de la cocina', 1, 100, 1),
+(6, 'Switch 2', 'Switch del balcon', 0, 100, 2);
 
 --
 -- Indexes for dumped tables
@@ -59,7 +60,7 @@ INSERT INTO `Devices` (`id`, `name`, `description`, `state`, `type`) VALUES
 --
 -- Indexes for table `Devices`
 --
-ALTER TABLE `Devices`
+ALTER TABLE `Dispositivos`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -69,7 +70,7 @@ ALTER TABLE `Devices`
 --
 -- AUTO_INCREMENT for table `Devices`
 --
-ALTER TABLE `Devices`
+ALTER TABLE `Dispositivos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
