@@ -24,14 +24,20 @@ app.post('/device/',function(req,res){
     }
     
 });
-app.get('/pepe/', function(req,res) {
-    utils.query("select * from Dispositivos",function(err,rsp,fields){
-        if(err!=null)
-        console.log(rsp)
-        res.send(JSON.stringify(rsp)).status(200);
+
+// Cambiar estado
+app.put('/device/state/:id', function(req, res, next) {
+    utils.query('UPDATE `Devices` SET `state` = ? WHERE `id` = ?', 
+    [req.body.state, req.params.id], function(err, response, field) {
+        if (err) {
+            res.send(err).status(400);
+            return;
+        }
+    res.send({'changedRows': response.changedRows}).status(200);
     });
-  
 });
+
+
 app.get('/devices/', function(req, res, next) {
 
     utils.query("select * from Dispositivos",function(err,rsp,fields){

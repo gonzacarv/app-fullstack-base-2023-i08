@@ -62,12 +62,16 @@ class Main implements EventListenerObject, HttpResponse {
   }
 
   obtenerDispositivo() {
-    this.framework.ejecutarBackEnd(
-      "GET",
-      "http://localhost:8000/devices",
-      this
-    );
+    this.framework.ListarDispositivos("GET","http://localhost:8000/devices",this);
   }
+
+  cambiarDispositivo(devId: number, state: number) {
+    let newDevice = {state: state};
+    this.framework.CambiarDevice("PUT", `http://localhost:8000/device/state/${devId}`, this, newDevice);
+  }
+
+
+
 
   handleEvent(event) {
     var elemento = <HTMLInputElement>event.target;
@@ -96,13 +100,8 @@ class Main implements EventListenerObject, HttpResponse {
     } else if (elemento.id.startsWith("ck_")) {
       //Ir al backend y aviasrle que el elemento cambio de estado
       //TODO armar un objeto json con la clave id y status y llamar al metodo ejecutarBackend
-
-      console.log(
-        "El elemento " +
-          elemento.id +
-          " cambia de estado a =" +
-          elemento.checked
-      );
+      this.cambiarDispositivo(Number(elemento.id),Number(elemento.checked));
+      console.log("El elemento " + elemento.id + " cambia de estado a =" + elemento.checked);
     } else if (elemento.id.startsWith("Range_")) {
       //Ir al backend y aviasrle que el elemento cambio de estado
       //TODO armar un objeto json con la clave id y status y llamar al metodo ejecutarBackend
@@ -113,12 +112,17 @@ class Main implements EventListenerObject, HttpResponse {
           " cambia de estado a =" +
           elemento.value
       );
+    } else if (event.target.id == "btnAgregar") {
+
+
+
+
     } else {
       //TODO cambiar esto, recuperadon de un input de tipo text
       //el nombre  de usuario y el nombre de la persona
       // validando que no sean vacios
       console.log("yendo al back");
-      this.framework.ejecutarBackEnd(
+      this.framework.ListarDispositivos(
         "POST",
         "http://localhost:8000/device",
         this,
