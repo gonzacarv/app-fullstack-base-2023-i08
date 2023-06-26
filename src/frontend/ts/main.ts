@@ -38,7 +38,9 @@ class Main implements EventListenerObject, HttpResponse {
                                               </label>
                                             </div>`;
       if (disp.type == 0 || disp.type == 1) {
-        item += `<input type="range" width="0.5" id="Range_${disp.id}" min="0" max="100" />`;
+        item += `<input type="range" value="${disp.intensidad}" id="Range_${disp.id}" min="0" max="100" />`;
+      } else {
+        item += `<input type="range" hidden value="${disp.intensidad}" id="Range_${disp.id}" min="0" max="100" />`;
       }
 
       item += `
@@ -52,6 +54,7 @@ class Main implements EventListenerObject, HttpResponse {
       var checkPrender = document.getElementById("ck_" + disp.id);
       checkPrender.addEventListener("click", this);
     }
+
     for (var disp of lista) {
       var checkIntensidad = document.getElementById("Range_" + disp.id);
       checkIntensidad.addEventListener("click", this);
@@ -94,7 +97,7 @@ class Main implements EventListenerObject, HttpResponse {
       //Ir al backend y aviasrle que el elemento cambio de estado
       //TODO armar un objeto json con la clave id y status y llamar al metodo ejecutarBackend
 
-      alert(
+      console.log(
         "El elemento " +
           elemento.id +
           " cambia de estado a =" +
@@ -104,7 +107,7 @@ class Main implements EventListenerObject, HttpResponse {
       //Ir al backend y aviasrle que el elemento cambio de estado
       //TODO armar un objeto json con la clave id y status y llamar al metodo ejecutarBackend
 
-      alert(
+      console.log(
         "El elemento " +
           elemento.id +
           " cambia de estado a =" +

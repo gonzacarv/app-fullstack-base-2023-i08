@@ -13,7 +13,7 @@ app.use(express.static('/home/node/app/static/'));
 
 //=======[ Main module code ]==================================================
 app.post('/device/',function(req,res){
-    console.log("llego = "+req.body.id);
+    //console.log("llego = "+req.body.id);
     if(req.body.texto==undefined || req.body.texto==null || req.body.texto.length<4){
         res.status(409);
         res.send("el texto no es valido");
