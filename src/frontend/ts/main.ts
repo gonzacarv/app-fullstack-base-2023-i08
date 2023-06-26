@@ -5,8 +5,8 @@ class Main implements EventListenerObject, HttpResponse {
 
   manejarRespueta(respueta: string) {
     var lista: Array<Device> = JSON.parse(respueta);
-
     var ulDisp = document.getElementById("listaDisp");
+    //ulDisp.innerHTML="";
     for (var disp of lista) {
       var item: string = `<li class="collection-item avatar">`;
       if (disp.type == 0) {
@@ -50,40 +50,29 @@ class Main implements EventListenerObject, HttpResponse {
       ulDisp.innerHTML += item;
     }
 
+
     for (var disp of lista) {
       var checkPrender = document.getElementById("ck_" + disp.id);
       checkPrender.addEventListener("click", this);
-    }
-
-    for (var disp of lista) {
       var checkIntensidad = document.getElementById("Range_" + disp.id);
       checkIntensidad.addEventListener("click", this);
     }
+
   }
 
   obtenerDispositivo() {
-    this.framework.ListarDispositivos("GET","http://localhost:8000/devices",this);
+    this.framework.ejecutarBackEnd("GET","http://localhost:8000/devices",this);
   }
-
-  cambiarDispositivo(devId: number, state: number) {
-    let newDevice = {state: state};
-    this.framework.CambiarDevice("PUT", `http://localhost:8000/device/state/${devId}`, this, newDevice);
-  }
-
-
-
 
   handleEvent(event) {
     var elemento = <HTMLInputElement>event.target;
     console.log(elemento);
+
+
+
     if (event.target.id == "btnListar") {
       this.obtenerDispositivo();
-      //for (var user of this.users) {
-
-      //TODO cambiar ESTO por mostrar estos datos separados por "-"
-      //en un parrafo "etiqueta de tipo <p>"
-
-      //}
+      //console.log("Estamos en el handler de obtener dispo ")
     } else if (event.target.id == "btnLogin") {
       var iUser = <HTMLInputElement>document.getElementById("iUser");
       var iPass = <HTMLInputElement>document.getElementById("iPass");
@@ -92,37 +81,38 @@ class Main implements EventListenerObject, HttpResponse {
 
       if (username.length > 3 && password.length > 3) {
         //iriamos al servidor a consultar si el usuario y la cotraseña son correctas
-        var parrafo = document.getElementById("parrafo");
-        parrafo.innerHTML = "Espere...";
+        alert("Bienvenido: Gestion de usuarios pendiente de implementacion");
       } else {
-        alert("el nombre de usuario es invalido");
+        alert("Error: Nombre o contrasena menor a 3 digitos");
       }
+
+
+
+
     } else if (elemento.id.startsWith("ck_")) {
-      //Ir al backend y aviasrle que el elemento cambio de estado
-      //TODO armar un objeto json con la clave id y status y llamar al metodo ejecutarBackend
-      this.cambiarDispositivo(Number(elemento.id),Number(elemento.checked));
-      console.log("El elemento " + elemento.id + " cambia de estado a =" + elemento.checked);
+      var id = elemento.id.replace("ck_", ""); //Sacamos el prefijo para quedarnos con ID puro
+      var newValue:string;
+      if (elemento.value == "on") {
+        alert("Estamos en On")
+        newValue = "1";
+      }
+      else if (elemento.value == "off") {
+        alert("Estamos en Off")
+        newValue="0";
+      }
+      this.framework.ejecutarBackEnd("POST","http://localhost:8000/cambioestado",this,{ id: id, value: newValue });
+      console.log("El elemento " +elemento.id +" cambia de estado a =" +newValue);
     } else if (elemento.id.startsWith("Range_")) {
-      //Ir al backend y aviasrle que el elemento cambio de estado
-      //TODO armar un objeto json con la clave id y status y llamar al metodo ejecutarBackend
-
-      console.log(
-        "El elemento " +
-          elemento.id +
-          " cambia de estado a =" +
-          elemento.value
-      );
+      var id = elemento.id.replace("Range_", ""); //Sacamos el prefijo para quedarnos con ID puro
+      this.framework.ejecutarBackEnd("POST","http://localhost:8000/cambiointensidad",this,{ id: id, value: newValue });
+      console.log("El elemento " +elemento.id +" cambia de intensidad a =" +newValue);
     } else if (event.target.id == "btnAgregar") {
-
-
-
-
     } else {
       //TODO cambiar esto, recuperadon de un input de tipo text
       //el nombre  de usuario y el nombre de la persona
       // validando que no sean vacios
       console.log("yendo al back");
-      this.framework.ListarDispositivos(
+      this.framework.ejecutarBackEnd(
         "POST",
         "http://localhost:8000/device",
         this,
