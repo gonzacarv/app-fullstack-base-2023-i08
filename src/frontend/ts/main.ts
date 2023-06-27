@@ -20,6 +20,14 @@ class Main implements EventListenerObject, HttpResponse {
                           <p>
                           ${disp.description}
                           </p>
+
+                        <button class="btn waves-effect waves-teal" id="Editar_${disp.id}">
+                        <i class="material-icons right">edit</i>
+                    </button>
+                    <button class="btn waves-effect waves-teal" id="Borrar_${disp.id}">
+                        <i class="material-icons right">delete</i>
+                    </button>
+                    
                           <a href="#!" class="secondary-content">
                           <div class="switch">
                           <label>
@@ -52,14 +60,14 @@ class Main implements EventListenerObject, HttpResponse {
 
 
     for (var disp of lista) {
-      var checkPrender = document.getElementById("ck_" + disp.id);
-      checkPrender.addEventListener("click", this);
-    }
+      var Prender = document.getElementById("ck_" + disp.id);
+      Prender.addEventListener("click", this);
 
+      var Intensidad = document.getElementById("Range_" + disp.id);
+      Intensidad.addEventListener("click", this);
 
-    for (var disp of lista) {
-      var checkIntensidad = document.getElementById("Range_" + disp.id);
-      checkIntensidad.addEventListener("click", this);
+      var Borrar = document.getElementById("Borrar_" + disp.id);
+      Borrar.addEventListener("click", this);
     }
 
   }
@@ -92,16 +100,23 @@ class Main implements EventListenerObject, HttpResponse {
 
 
     } else if (elemento.id.startsWith("ck_")) {
+
       //console.log("Elemento " +elemento.id +" /// Estado a =" +elemento.checked);
       var id = elemento.id.replace("ck_", ""); //Sacamos el prefijo para quedarnos con ID puro
       var newValue : string;
       if (elemento.checked == true) newValue = "1";      
       if (elemento.checked == false) newValue = "0";      
       this.framework.ejecutarBackEnd("POST","http://localhost:8000/cambioestado",this,{ id: id, value: newValue });
+    
     } else if (elemento.id.startsWith("Range_")) {
       console.log("              ########################El elemento " +elemento.id +" cambia de estado a =" +elemento.value);
       var id = elemento.id.replace("Range_", ""); //Sacamos el prefijo para quedarnos con ID puro
       this.framework.ejecutarBackEnd("POST","http://localhost:8000/cambiointensidad",this,{ id: id, value: elemento.value});
+    
+    } else if (elemento.id.startsWith("Borrar_")) {
+      console.log(" Borramos " +elemento.id);
+      var id = elemento.id.replace("Borrar_", ""); //Sacamos el prefijo para quedarnos con ID puro
+      this.framework.ejecutarBackEnd("POST","http://localhost:8000/eliminar",this,{ id: id, value: elemento.value});
       
     } else if (event.target.id == "btnAgregar") {
     } else {

@@ -36,7 +36,7 @@ app.post('/cambioestado/',function(req,res){
     var stado = req.body.value.replace("on", "1");
     var stado = req.body.value.replace("off", "0");
     //console.log("             #############                El valor de req.body.id: "+req.body.id+" El valor de stado:"+stado) //mostramos la respuesta en la consola
-     utils.query("update Dispositivos SET state=" + stado + " WHERE id=" + req.body.id, function(err, rsp, fields) {
+     utils.query("UPDATE Dispositivos SET state=" + stado + " WHERE id=" + req.body.id, function(err, rsp, fields) {
      console.log(err)
         if (err) {
         res.status(409);
@@ -52,8 +52,25 @@ app.post('/cambioestado/',function(req,res){
 
 
 app.post('/cambiointensidad/',function(req,res){
-    console.log("El valor de req.body.id: "+req.body.id+" El valor de req.body.value:"+req.body.value) //mostramos la respuesta en la consola
-     utils.query("update Dispositivos SET intensidad=" + req.body.value + " WHERE id=" + req.body.id, function(err, rsp, fields) {
+     //console.log("El valor de req.body.id: "+req.body.id+" El valor de req.body.value:"+req.body.value) //mostramos la respuesta en la consola
+     utils.query("UPDATE Dispositivos SET intensidad=" + req.body.value + " WHERE id=" + req.body.id, function(err, rsp, fields) {
+     console.log(err)
+        if (err) {
+        res.status(409);
+        res.send("error");
+      } else {
+        //res.status(200);
+        //res.send();
+        res.send(JSON.stringify(rsp)).status(200);
+      }
+    }); 
+});
+
+
+
+app.post('/eliminar/',function(req,res){
+     console.log("Se elimino el registro con ID: "+req.body.id) //mostramos la respuesta en la consola
+     utils.query("DELETE FROM Dispositivos WHERE id=" + req.body.id, function(err, rsp, fields) {
      console.log(err)
         if (err) {
         res.status(409);
