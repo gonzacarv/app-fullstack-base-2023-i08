@@ -30,8 +30,13 @@ app.get('/devices/', function(req, res, next) {
 
 
 app.post('/cambioestado/',function(req,res){
-    console.log("El valor de req.body.id: "+req.body.id+" El valor de req.body.value:"+req.body.value) //mostramos la respuesta en la consola
-     utils.query("update Dispositivos SET state=" + req.body.value + " WHERE id=" + req.body.id, function(err, rsp, fields) {
+    //console.log("            #############                El valor de req.body.id: "+req.body.id+" El valor de req.body.value:"+req.body.value) //mostramos la respuesta en la consola
+    if (req.body.value == "on") console.log("                ############                      Todo bien con el ON")
+    if (req.body.value == "off") console.log("                ############                      Todo bien con el OFF")
+    var stado = req.body.value.replace("on", "1");
+    var stado = req.body.value.replace("off", "0");
+    //console.log("             #############                El valor de req.body.id: "+req.body.id+" El valor de stado:"+stado) //mostramos la respuesta en la consola
+     utils.query("update Dispositivos SET state=" + stado + " WHERE id=" + req.body.id, function(err, rsp, fields) {
      console.log(err)
         if (err) {
         res.status(409);
@@ -48,7 +53,7 @@ app.post('/cambioestado/',function(req,res){
 
 app.post('/cambiointensidad/',function(req,res){
     console.log("El valor de req.body.id: "+req.body.id+" El valor de req.body.value:"+req.body.value) //mostramos la respuesta en la consola
-     utils.query("update Dispositivos SET intensidad=" + req.body.id + " WHERE id=" + req.body.id, function(err, rsp, fields) {
+     utils.query("update Dispositivos SET intensidad=" + req.body.value + " WHERE id=" + req.body.id, function(err, rsp, fields) {
      console.log(err)
         if (err) {
         res.status(409);

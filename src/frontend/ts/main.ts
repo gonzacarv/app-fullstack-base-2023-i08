@@ -54,6 +54,10 @@ class Main implements EventListenerObject, HttpResponse {
     for (var disp of lista) {
       var checkPrender = document.getElementById("ck_" + disp.id);
       checkPrender.addEventListener("click", this);
+    }
+
+
+    for (var disp of lista) {
       var checkIntensidad = document.getElementById("Range_" + disp.id);
       checkIntensidad.addEventListener("click", this);
     }
@@ -67,8 +71,6 @@ class Main implements EventListenerObject, HttpResponse {
   handleEvent(event) {
     var elemento = <HTMLInputElement>event.target;
     console.log(elemento);
-
-
 
     if (event.target.id == "btnListar") {
       this.obtenerDispositivo();
@@ -90,22 +92,17 @@ class Main implements EventListenerObject, HttpResponse {
 
 
     } else if (elemento.id.startsWith("ck_")) {
+      //console.log("Elemento " +elemento.id +" /// Estado a =" +elemento.checked);
       var id = elemento.id.replace("ck_", ""); //Sacamos el prefijo para quedarnos con ID puro
-      var newValue:string;
-      if (elemento.value == "on") {
-        alert("Estamos en On")
-        newValue = "1";
-      }
-      else if (elemento.value == "off") {
-        alert("Estamos en Off")
-        newValue="0";
-      }
+      var newValue : string;
+      if (elemento.checked == true) newValue = "1";      
+      if (elemento.checked == false) newValue = "0";      
       this.framework.ejecutarBackEnd("POST","http://localhost:8000/cambioestado",this,{ id: id, value: newValue });
-      console.log("El elemento " +elemento.id +" cambia de estado a =" +newValue);
     } else if (elemento.id.startsWith("Range_")) {
+      console.log("              ########################El elemento " +elemento.id +" cambia de estado a =" +elemento.value);
       var id = elemento.id.replace("Range_", ""); //Sacamos el prefijo para quedarnos con ID puro
-      this.framework.ejecutarBackEnd("POST","http://localhost:8000/cambiointensidad",this,{ id: id, value: newValue });
-      console.log("El elemento " +elemento.id +" cambia de intensidad a =" +newValue);
+      this.framework.ejecutarBackEnd("POST","http://localhost:8000/cambiointensidad",this,{ id: id, value: elemento.value});
+      
     } else if (event.target.id == "btnAgregar") {
     } else {
       //TODO cambiar esto, recuperadon de un input de tipo text
